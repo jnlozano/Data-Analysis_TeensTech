@@ -33,16 +33,17 @@ results_mcs_sca_total %>% summarise(median_effect = median(effect, na.rm = TRUE)
 results_mcs_sca_total %>% filter(respondent == "Parent") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
 results_mcs_sca_total %>% filter(respondent == "Cohort Member") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
 
-a<-results_mcs_sca_total %>% filter(controls == "Controls") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
-b<-results_mcs_sca_total %>% filter(controls == "No Controls") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
-c<-results_mcs_sca_total %>% filter(x_variable == "fcsome00r") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
+a <-results_mcs_sca_total %>% filter(controls == "Controls") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
+b <-results_mcs_sca_total %>% filter(controls == "No Controls") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
+#c<-results_mcs_sca_total %>% filter(x_variable == "fcsome00r") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
 labels <- c("Controls",
-            "No Controls",
-            "fcsome00r")
+            "No Controls")
+            #"fcsome00r")
 labels <- unlist(labels)
-socmed <- rbind(a,b,c)
+socmed <- rbind(a,b)
 socmed$x_varname <- labels
-rm(a,b,c)
+rm(a,b)
+
 if(Mod ==5){
 ### Sectioned off for each variable set. Currently uses all sections 
 a<-results_mcs_sca_total %>% filter(x_variable == "fcsome00r") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
@@ -146,6 +147,8 @@ table2$cont<-ControlLabel
 table2$SDQincluded<-SDQincludedLabel
 table2$sex <- SexLabel
 table2$model <- ModLabel
+table2$var_name <- "Social Media" 
+#table2$SDQLabel <- "combinedSDQ"
 #table2$age <- AgeLabel
 table2 <- table2 %>% 
   rename(
@@ -154,9 +157,9 @@ table2 <- table2 %>%
   )
 
 #table2 <- table2[c("sex","median_slope","median_n2","x_varname","SDQincluded","PRemotionItems","run","CodeVersion","ItemsLabel","ScalesLabel","cont","model", "age")]
-table2 <- table2[c("sex","median_slope","median_n2","x_varname","SDQincluded","PRemotionItems","run","CodeVersion","ItemsLabel","ScalesLabel","cont","model")]
+table2 <- table2[c("sex","var_name", "median_slope","median_n2","x_varname","SDQincluded", "PRemotionItems","run","CodeVersion","ItemsLabel","ScalesLabel","cont","model")]
 
 write.table(table2, "mcs.table_configurations.csv", sep = ",", col.names = !file.exists("table2.csv"), append = T)
-#write.csv(table2,file=paste("mcs.table_configurations.csv",sep="")) #only uncomment if you need to initialize 
+#write.csv(table2,file=paste("mcs.config3.csv",sep="")) #only uncomment if you need to initialize 
 
 print("End 3_3_sca_analyse_mcs")

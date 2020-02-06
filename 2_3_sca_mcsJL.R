@@ -328,10 +328,38 @@ if (Items== 0 & Scales==1) {
   
   #### Bind all of these specifcations together
   y_variables_sample_cm <- c( list(y4,y5,y6))#leaving behind the missing valued set which are not used
+  
   if (SelfHarm==1) {
     y7 <-c("fcharm00")
     y_variables_sample_cm <- c(list(y4,y5,y6,y7))
   }
+  if (combineSDQ ==1){
+    y_variables_sample_cm <- c(list("fcmdsa00r",
+                               "fcmdsb00r",
+                               "fcmdsc00r",
+                               "fcmdsd00r",
+                               "fcmdse00r",
+                               "fcmdsf00r",
+                               "fcmdsg00r",
+                               "fcmdsh00r",
+                               "fcmdsi00r",
+                               "fcmdsj00r",
+                               "fcmdsk00r",
+                               "fcmdsl00r",
+                               "fcmdsm00r",
+                               "fcsati00r",
+                               "fcgdql00r",
+                               "fcdowl00r",
+                               "fcvalu00r",
+                               "fcgdsf00r",
+                               "fcscwk00r",
+                               "fcwylk00r",
+                               "fcfmly00r",
+                               "fcfrns00r",
+                               "fcschl00r",
+                               "fclife00r"))
+  }
+  
   save(y_variables_sample_cm, file = "2_3_sca_mcs_y_sample_cm.rda")
   length(y_variables_sample_cm)
   
@@ -555,6 +583,7 @@ if (LimitedControls==1) { # Based off what KC and JL discussed. Age included for
 #JL: Add all x_variables to data_short. Currently only using social media, so data_short is shorter than usual. 
 data_short <-
   data[, c(
+    "fccomh00r",
     "fcsome00r",
     "fctvho00r",
     "fccomh00r",
@@ -790,6 +819,8 @@ if(Items== 1 & Scales ==1){
 #CHECK THIS DATA SHORT. Is it necessary? 
 data_short <- 
   data[, c(
+    "fccomh00r",
+    "fctvho00r",
     "fcsome00r", ### JL: add additional variables as necessary 
     "fccomh00r",
     "fccmex00r",

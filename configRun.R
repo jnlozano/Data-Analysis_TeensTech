@@ -12,7 +12,7 @@ LimitedControls<- 0
 NoSDQHeadAche<-0
 SelfHarm<-0
 SelfHarmi <-0
-IVtype <- 0 
+IVtype <- 4 
 dropSDQ<-0 
 PrintGraphs<-0 
 Scripted<-1
@@ -36,7 +36,7 @@ LimitedControls<- 0
 NoSDQHeadAche<-0
 SelfHarm<-0
 SelfHarmi <-0
-IVtype <- 0 
+IVtype <- 4
 dropSDQ<-0 
 PrintGraphs<-0 
 Scripted<-1
@@ -61,6 +61,7 @@ NoSDQHeadAche<-0
 SelfHarm<-0
 SelfHarmi <-0
 IVtype <- 0 
+combineSDQ <- 1 # combines SDQ scale items. NEW. 
 dropSDQ<-0 
 PrintGraphs<-0 
 Scripted<-1
@@ -84,7 +85,7 @@ LimitedControls<- 1
 NoSDQHeadAche<-0
 SelfHarm<-0
 SelfHarmi <-0
-IVtype <- 0 
+IVtype <- 4
 dropSDQ<-0 
 PrintGraphs<-0 
 Scripted<-1
@@ -108,7 +109,7 @@ LimitedControls<- 1
 NoSDQHeadAche<-0
 SelfHarm<-0
 SelfHarmi <-0
-IVtype <- 0 
+IVtype <- 4
 dropSDQ<-1 
 PrintGraphs<-0 
 Scripted<-1
@@ -132,7 +133,7 @@ LimitedControls<- 1
 NoSDQHeadAche<-0
 SelfHarm<-0
 SelfHarmi <-0
-IVtype <- 0 
+IVtype <- 4 
 dropSDQ<-1
 PrintGraphs<-0 
 Scripted<-1
@@ -156,7 +157,7 @@ LimitedControls<- 1
 NoSDQHeadAche<-0
 SelfHarm<-1
 SelfHarmi <-0
-IVtype <- 0 
+IVtype <- 4
 dropSDQ<-1
 PrintGraphs<-0 
 Scripted<-1
@@ -180,7 +181,7 @@ LimitedControls<- 1
 NoSDQHeadAche<-0
 SelfHarm<-0
 SelfHarmi <-1 #SelfHarmi added for differentation between scales and items.   
-IVtype <- 0 
+IVtype <- 1
 dropSDQ<-1
 PrintGraphs<-0 
 Scripted<-1
