@@ -17,6 +17,7 @@ results_mcs_sca_pr$respondent <-
 
 results_mcs_sca_total <- rbind(results_mcs_sca_cm, results_mcs_sca_pr)
 save(results_mcs_sca_total, file = "2_3_sca_mcs_results.rda")
+load("2_3_sca_mcs_results.rda")
 
 ####################################################################################
 # Number of specifications
@@ -35,10 +36,10 @@ results_mcs_sca_total %>% filter(respondent == "Cohort Member") %>% summarise(me
 
 a <-results_mcs_sca_total %>% filter(controls == "Controls") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
 b <-results_mcs_sca_total %>% filter(controls == "No Controls") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
-#c<-results_mcs_sca_total %>% filter(x_variable == "fcsome00r") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
+c<-results_mcs_sca_total %>% filter(x_variable == "fcsome00r") %>% summarise(median_effect = median(effect, na.rm = TRUE), median_effectsize = median(rsqrd, na.rm = TRUE))
 labels <- c("Controls",
-            "No Controls")
-            #"fcsome00r")
+            "No Controls"
+            )
 labels <- unlist(labels)
 socmed <- rbind(a,b)
 socmed$x_varname <- labels
@@ -135,7 +136,7 @@ table2 <-end}
 ### Table 2 Components (return to get the med for even number of obs)
 ####################################################################################
 
-table2 <- socmed
+#table2 <- socmed
 table2$PRemotionItems<-EmoItemOnlyLabel
 table2$run<-RunNum
 table2$CurveFit<-GAMMLabel
@@ -146,20 +147,20 @@ table2$ScalesLabel<-ScalesLabel
 table2$cont<-ControlLabel
 table2$SDQincluded<-SDQincludedLabel
 table2$sex <- SexLabel
-table2$model <- ModLabel
-table2$var_name <- "Social Media" 
-#table2$SDQLabel <- "combinedSDQ"
-#table2$age <- AgeLabel
+#table2$model <- ModLabel
+#table2$var_name <- "socmed" 
+table2$JeanSDQ <- "consolidatedSDQ"
+table2$age_control <- "age_in_control"
 table2 <- table2 %>% 
   rename(
     median_slope = median_effect,
     median_n2 = median_effectsize
   )
 
-#table2 <- table2[c("sex","median_slope","median_n2","x_varname","SDQincluded","PRemotionItems","run","CodeVersion","ItemsLabel","ScalesLabel","cont","model", "age")]
-table2 <- table2[c("sex","var_name", "median_slope","median_n2","x_varname","SDQincluded", "PRemotionItems","run","CodeVersion","ItemsLabel","ScalesLabel","cont","model")]
+table2 <- table2[c("sex","median_slope","median_n2","x_varname","SDQincluded", "PRemotionItems","run","CodeVersion","ItemsLabel","ScalesLabel","cont", "age_control")]
+#table2 <- table2[c("sex","var_name", "median_slope","median_n2","x_varname","SDQincluded","JeanSDQ", "PRemotionItems","run","CodeVersion","ItemsLabel","ScalesLabel","cont","age_control","model")]
 
-write.table(table2, "mcs.table_configurations.csv", sep = ",", col.names = !file.exists("table2.csv"), append = T)
-#write.csv(table2,file=paste("mcs.config3.csv",sep="")) #only uncomment if you need to initialize 
+write.table(table2, "mcs.comparison_vars.csv", sep = ",", col.names = !file.exists("table2.csv"), append = T)
+#write.csv(table2,file=paste("mcs.comparison_vars.csv",sep="")) #only uncomment if you need to initialize 
 
 print("End 3_3_sca_analyse_mcs")

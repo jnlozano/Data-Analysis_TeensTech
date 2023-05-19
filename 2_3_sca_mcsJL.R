@@ -103,9 +103,9 @@ curve <- function(input) {
         if (LimitedControls==1){
           reg <- lm(
             scale(dv) ~ scale(iv) +
-              scale(fd06e00) +            scale(fcpaab00) +
+              scale(fd06e00) +  scale(fcpaab00) +
               scale(fpwrdscm) + scale(fdacaq00) + scale(fd05s00) +
-              scale(fpclsi00) +                     scale(fdtots00) +
+              scale(fpclsi00) +  scale(fccage00) +  scale(fdtots00) +  #JL: ADDED AGE IN HERE. dont forget. Do the control variables list even matter? down below...
               scale(foede000),
             data = data_short
           )
@@ -273,6 +273,41 @@ if (Mod >2 & Mod != 5) {
       )
   }
 }
+#######################################################
+# Control Variables
+#######################################################
+#JL: Pretty sure these lists dont matter. Test it 
+controls <-
+  c(
+    "edumot",
+    "fd06e00",
+    "clpar",
+    "fcpaab00",
+    "fpwrdscm",
+    "fdacaq00",
+    "fd05s00",
+    "fpclsi00",
+    "fpchti00",
+    "fdkessl",
+    "fdtots00",
+    "foede000"
+  )
+
+if (LimitedControls==1) { # Based off what KC and JL discussed. Age included for now. 
+  controls <-
+    c(
+      "fd06e00",
+      "fcpaab00",
+      "fpwrdscm",
+      "fdacaq00",
+      "fd05s00",
+      "fpclsi00",
+      "fdtots00",
+      "fccage00", #age or not? JL: doesn't seem to change values of median_effect. Kept out for now. 2/07 keep IN 
+      "foede000"
+    )
+  print("running limited controls")
+}
 
 #######################################################
 # Y Variables
@@ -284,19 +319,6 @@ if (Mod >2 & Mod != 5) {
 
 ### Scales only 
 if (Items== 0 & Scales==1) {
-  
-  #### Choose the three pre-specified variables 
-  y1 <-
-    c(#these are the Mood and Feelings/depression scale items with one missing mean imputed (a common approach-even if bad, but not worse than some other specifications?)
-      "mfq_depress_sc1miss" #these next 3 are not used see below a y var sample creation
-    )
-  y2 <-
-    c(#these are the Mood and Feelings/depression scale items with one missing mean imputed (a common approach-even if bad)
-      "wb_sc1miss")
-  y3 <-
-    c(#these are the Mood and Feelings/depression scale items with one missing mean imputed (a common approach-even if bad)
-      "se_sc1miss"
-    )
   y4 <-
     c( #these are the Mood and Feelings/depression scale items
       "fcmdsa00r",
@@ -332,32 +354,6 @@ if (Items== 0 & Scales==1) {
   if (SelfHarm==1) {
     y7 <-c("fcharm00")
     y_variables_sample_cm <- c(list(y4,y5,y6,y7))
-  }
-  if (combineSDQ ==1){
-    y_variables_sample_cm <- c(list("fcmdsa00r",
-                               "fcmdsb00r",
-                               "fcmdsc00r",
-                               "fcmdsd00r",
-                               "fcmdse00r",
-                               "fcmdsf00r",
-                               "fcmdsg00r",
-                               "fcmdsh00r",
-                               "fcmdsi00r",
-                               "fcmdsj00r",
-                               "fcmdsk00r",
-                               "fcmdsl00r",
-                               "fcmdsm00r",
-                               "fcsati00r",
-                               "fcgdql00r",
-                               "fcdowl00r",
-                               "fcvalu00r",
-                               "fcgdsf00r",
-                               "fcscwk00r",
-                               "fcwylk00r",
-                               "fcfmly00r",
-                               "fcfrns00r",
-                               "fcschl00r",
-                               "fclife00r"))
   }
   
   save(y_variables_sample_cm, file = "2_3_sca_mcs_y_sample_cm.rda")
@@ -530,7 +526,7 @@ if (Items== 1 & Scales==1) { # Original Set of Ys and New Scales. JL: New Scales
   
   
   #### Bind all of these specifcations together
-  y_variables_sample_cm <- c(y_variables_sample, y4, list(y1, y2, y3)) #this is a list of what to composite
+  y_variables_sample_cm <- c(y_variables_sample, y4, list(y1,y2,y3)) #this is a list of what to composite
   save(y_variables_sample_cm, file = "2_3_sca_mcs_y_sample_cm.rda")
   length(y_variables_sample_cm)
   rm(y_variables)
@@ -542,40 +538,6 @@ if (Items== 1 & Scales==1) { # Original Set of Ys and New Scales. JL: New Scales
 
 gc() # used to help free up memory since R is so RAM greedy
 
-#######################################################
-# Control Variables
-#######################################################
-controls <-
-  c(
-    "edumot",
-    "fd06e00",
-    "clpar",
-    "fcpaab00",
-    "fpwrdscm",
-    "fdacaq00",
-    "fd05s00",
-    "fpclsi00",
-    "fpchti00",
-    "fdkessl",
-    "fdtots00",
-    "foede000"
-  )
-
-if (LimitedControls==1) { # Based off what KC and JL discussed. Age included for now. 
-  controls <-
-    c(
-      "fd06e00",
-      "fcpaab00",
-      "fpwrdscm",
-      "fdacaq00",
-      "fd05s00",
-      "fpclsi00",
-      "fdtots00",
-      #"fccage00", #age or not? JL: doesn't seem to change values of median_effect. Kept out for now. 
-      "foede000"
-    )
-  print("running limited controls")
-}
 
 #######################################################
 # Subset Data
@@ -583,13 +545,39 @@ if (LimitedControls==1) { # Based off what KC and JL discussed. Age included for
 #JL: Add all x_variables to data_short. Currently only using social media, so data_short is shorter than usual. 
 data_short <-
   data[, c(
-    "fccomh00r",
-    "fcsome00r",
     "fctvho00r",
     "fccomh00r",
     "fccmex00r",
     "fcinth00r",
     "fcsome00r",
+    "tech",
+    "fcalfv00r",
+    "fccanb00r",
+    "fchurt00r",
+    "fcares00r",
+    "fccycf00r",
+    "fchtcm00",
+    "fcglas00r",
+    "hand",
+    "fcfrut00",
+    "fcvegi00",
+    "sleeptime",
+    "fcbrkn00",
+    "fcalcd00",
+    "fcalfv00",
+    "fcsmok00",
+    "fcotdr00",
+    "fcphex00",
+    "fcwegt00",
+    "fcobflg6",
+    "fcnufr00",
+    "fcsexx00",
+    "fcknif00",
+    "fcpols00",
+    "fptsus00",
+    "fcstol00",
+    "fcquam00",
+    "fcvicf0a", # ADDED
     "fcmdsa00r",
     "fcmdsb00r",
     "fcmdsc00r",
@@ -628,7 +616,8 @@ data_short <-
     "fdtots00",
     "foede000",
     "tech",
-    "fcharm00", 
+    "fcharm00",
+    "fccage00",
     "mfq_depress_sc", #built into the data but not used in models
     "mfq_depress_sc1miss", #built into the data but not used in models
     "wb_sc" , #built into the data but not used in models
@@ -645,7 +634,7 @@ results_mcs_sca_cm <-
   curve(resultsframe(x_var = x_variables, y_var = y_variables_sample_cm)) #If undefined error, ensure data_short has all variables necessary 
 save(results_mcs_sca_cm, file = "2_3_sca_mcs_results_cm.rda")
 print("Cohort Member Complete")
-gc()
+gc() 
 rm(results_mcs_sca_cm) # free up memory 
 ####################################################################################
 # Execute Specification Curve Analyses for PARENTS
@@ -744,8 +733,11 @@ if (Items== 0 & Scales==1) { # Original Set of Y scales
     y10 <-c("fcharm00")
     y_variables_sample_pr <- c(list(y2,y3,y4,y5,y6,y7,y8,y9,y10))
   }
+  if(combineSDQ == 1){
+    y_variables_sample_pr <- c(list(y6)) # JL: Just keep total as scale. JEan's scale 
+  }
   save(y_variables_sample_pr, file = "2_3_sca_mcs_y_sample_pr.rda")
-  rm(y2,y3,y4,y5,y6,y7,data_short)
+  rm(y2,y3,y4,y5,y6,y7,y8,y9,data_short)
   length(y_variables_sample_pr)
 }
 
@@ -780,8 +772,7 @@ if(Items== 1 & Scales ==1){
       "fpsdfe00",
       "fpsdte00"
     )
-  if(SelfHarmi == 1){   # JL: This is where self harm is added to list 
-    y<- c(y, "fcharm00")}
+ 
   y_variables <- (do.call("c", lapply(seq_along(y), function(i) combn(y, i, FUN = list))))
   y_variables_sample <- sample(y_variables[-(1:length(y))], 801, replace = FALSE)
   
@@ -807,7 +798,9 @@ if(Items== 1 & Scales ==1){
     y_variables_sample_pr <- c(y_variables_sample, y1, # KMC: is y1 a repeate of y_variables_sample?
                                list(y2,y3,y4,y5,y6,y7,y8,y9,y10))
   }
-  
+  if(combineSDQ == 1){
+    y_variables_sample_pr <- c(list(y6)) # JL: Just keep total as scale. JEan's scale 
+  }
   save(y_variables_sample_pr, file = "2_3_sca_mcs_y_sample_pr.rda")
   length(y_variables_sample_pr)
   rm(y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,data_short)
@@ -819,9 +812,39 @@ if(Items== 1 & Scales ==1){
 #CHECK THIS DATA SHORT. Is it necessary? 
 data_short <- 
   data[, c(
-    "fccomh00r",
     "fctvho00r",
-    "fcsome00r", ### JL: add additional variables as necessary 
+    "fccomh00r",
+    "fccmex00r",
+    "fcinth00r",
+    "fcsome00r",
+    "tech",
+    "fcalfv00r",
+    "fccanb00r",
+    "fchurt00r",
+    "fcares00r",
+    "fccycf00r",
+    "fchtcm00",
+    "fcglas00r",
+    "hand",
+    "fcfrut00",
+    "fcvegi00",
+    "sleeptime",
+    "fcbrkn00",
+    "fcalcd00",
+    "fcalfv00",
+    "fcsmok00",
+    "fcotdr00",
+    "fcphex00",
+    "fcwegt00",
+    "fcobflg6",
+    "fcnufr00",
+    "fcsexx00",
+    "fcknif00",
+    "fcpols00",
+    "fptsus00",
+    "fcstol00",
+    "fcquam00",
+    "fcvicf0a", ### JL: add additional variables as necessary 
     "fccomh00r",
     "fccmex00r",
     "fcinth00r",
@@ -869,6 +892,7 @@ data_short <-
     "fpchti00",
     "fdkessl",
     "fdtots00",
+    "fccage00",
     "foede000",
     "fcharm00" # keep in data_shorts 
   )]
